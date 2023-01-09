@@ -1,19 +1,20 @@
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
 using Abp.Authorization.Users;
 using Abp.Domain.Repositories;
 using Abp.IdentityFramework;
+using Microsoft.AspNet.Identity;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 using TestEH.Authorization;
 using TestEH.Authorization.Roles;
 using TestEH.Authorization.Users;
+using TestEH.Peopels;
 using TestEH.Roles.Dto;
 using TestEH.Users.Dto;
-using Microsoft.AspNet.Identity;
 
 namespace TestEH.Users
 {
@@ -22,15 +23,18 @@ namespace TestEH.Users
     {
         private readonly UserManager _userManager;
         private readonly RoleManager _roleManager;
+        private readonly IRepository<Person> _personRepo;
         private readonly IRepository<Role> _roleRepository;
 
         public UserAppService(
+            IRepository<Person> personRepo,
             IRepository<User, long> repository,
             UserManager userManager,
             IRepository<Role> roleRepository,
             RoleManager roleManager)
             : base(repository)
         {
+            _personRepo = personRepo;
             _userManager = userManager;
             _roleRepository = roleRepository;
             _roleManager = roleManager;
@@ -38,6 +42,31 @@ namespace TestEH.Users
 
         public override async Task<UserDto> GetAsync(EntityDto<long> input)
         {
+            Person pr = await _personRepo.FirstOrDefaultAsync(h => h.Code == "01");
+            if (pr == null)
+            {
+                pr = _personRepo.Insert(new Person());
+                pr.Name = "John";
+                pr.Code = "01";
+                pr.PersonType = PersonType.Legal;
+            }
+            else
+            {
+                switch (pr.PersonType)
+                {
+                    case PersonType.Real:
+                        pr.PersonType = PersonType.Legal;
+                        break;
+                    case PersonType.Legal:
+                        pr.PersonType = PersonType.Real;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            await CurrentUnitOfWork.SaveChangesAsync();
+
             var user = await base.GetAsync(input);
             var userRoles = await _userManager.GetRolesAsync(user.Id);
             user.Roles = userRoles.Select(ur => ur).ToArray();

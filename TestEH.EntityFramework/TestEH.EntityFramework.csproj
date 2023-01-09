@@ -259,6 +259,10 @@
   <ItemGroup>
     <Compile Include="EntityFramework\TestEHDbContext.cs" />
     <Compile Include="EntityFramework\Repositories\TestEHRepositoryBase.cs" />
+    <Compile Include="Migrations\202301090616409_addPersonEntity.cs" />
+    <Compile Include="Migrations\202301090616409_addPersonEntity.designer.cs">
+      <DependentUpon>202301090616409_addPersonEntity.cs</DependentUpon>
+    </Compile>
     <Compile Include="TestEHDataModule.cs" />
     <Compile Include="Migrations\201809270654064_InitialMigrations.cs" />
     <Compile Include="Migrations\201809270654064_InitialMigrations.Designer.cs">
@@ -400,6 +404,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202206221055273_Upgrade_To_ABP_7.3.resx">
       <DependentUpon>202206221055273_Upgrade_To_ABP_7.3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202301090616409_addPersonEntity.resx">
+      <DependentUpon>202301090616409_addPersonEntity.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

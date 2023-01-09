@@ -1,9 +1,11 @@
-﻿using System.Reflection;
+﻿using Abp;
+using Abp.Domain.Entities.Auditing;
 using Abp.Localization.Dictionaries;
 using Abp.Localization.Dictionaries.Xml;
 using Abp.Modules;
 using Abp.Zero;
 using Abp.Zero.Configuration;
+using System.Reflection;
 using TestEH.Authorization;
 using TestEH.Authorization.Roles;
 using TestEH.Authorization.Users;
@@ -27,6 +29,13 @@ namespace TestEH
             //Remove the following line to disable multi-tenancy.
             Configuration.MultiTenancy.IsEnabled = TestEHConsts.MultiTenancyEnabled;
 
+            Configuration.EntityHistory.Selectors.Add(
+                new NamedTypeSelector(
+                    "FullAuditedEntity",
+                    type => typeof(FullAuditedEntity).IsAssignableFrom(type)
+                )
+            );
+
             //Add/remove localization sources here
             Configuration.Localization.Sources.Add(
                 new DictionaryBasedLocalizationSource(
@@ -43,7 +52,7 @@ namespace TestEH
             Configuration.Authorization.Providers.Add<TestEHAuthorizationProvider>();
 
             Configuration.Settings.Providers.Add<AppSettingProvider>();
-            
+
             Configuration.Settings.SettingEncryptionConfiguration.DefaultPassPhrase = TestEHConsts.DefaultPassPhrase;
         }
 

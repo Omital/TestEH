@@ -1,16 +1,19 @@
-﻿using System.Data.Common;
-using System.Data.Entity;
-using Abp.DynamicEntityProperties;
+﻿using Abp.DynamicEntityProperties;
 using Abp.Zero.EntityFramework;
+using System.Data.Common;
+using System.Data.Entity;
 using TestEH.Authorization.Roles;
 using TestEH.Authorization.Users;
 using TestEH.MultiTenancy;
+using TestEH.Peopels;
 
 namespace TestEH.EntityFramework
 {
     public class TestEHDbContext : AbpZeroDbContext<Tenant, Role, User>
     {
         //TODO: Define an IDbSet for your Entities...
+
+        public virtual IDbSet<Person> Peopels { get; set; }
 
         /* NOTE: 
          *   Setting "Default" to base class helps us when working migration commands on Package Manager Console.

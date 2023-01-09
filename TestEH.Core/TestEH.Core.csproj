@@ -238,6 +238,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Peopels\Person.cs" />
     <Compile Include="TestEHConsts.cs" />
     <Compile Include="TestEHCoreModule.cs" />
     <Compile Include="AppVersionHelper.cs" />
